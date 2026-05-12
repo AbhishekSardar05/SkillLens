@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-  baseURL: 'skill-lens-backend.vercel.app/api'
+  baseURL: 'https://skilllens-dpn0.onrender.com/api'
 })
 
 API.interceptors.request.use((req) => {
