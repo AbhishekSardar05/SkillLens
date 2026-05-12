@@ -49,9 +49,13 @@ export default function Signup() {
       setStep(2)
       showToast(`OTP sent to ${form.email}!`, 'success')
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong')
-      showToast(err.response?.data?.message || 'Something went wrong', 'error')
-    }
+  console.log('FULL ERROR:', err)
+  console.log('RESPONSE:', err.response)
+  console.log('DATA:', err.response?.data)
+
+  setError(err.response?.data?.message || err.message)
+  showToast(err.response?.data?.message || err.message, 'error')
+}
     setLoading(false)
   }
 
@@ -112,7 +116,7 @@ export default function Signup() {
               {/* Email */}
               <div style={styles.field}>
                 <label style={styles.label}>Email Address</label>
-                <input style={styles.input} type="email" placeholder="gaurav@gmail.com" value={form.email} onChange={e => setForm({...form, email:e.target.value})} required />
+                <input style={styles.input} type="email" placeholder="xyz@gmail.com" value={form.email} onChange={e => setForm({...form, email:e.target.value})} required />
               </div>
 
               {/* Role Selection */}
@@ -206,7 +210,7 @@ export default function Signup() {
             </div>
 
             {/* Google */}
-            <button className="google-btn" onClick={() => window.location.href = 'http://localhost:5000/api/auth/google'} style={styles.googleBtn}>
+            <button className="google-btn" onClick={() => window.location.href = 'https://skilllens-dpn0.onrender.com/api/auth/google'} style={styles.googleBtn}>
               <svg width="18" height="18" viewBox="0 0 18 18">
                 <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/>
                 <path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2.01c-.72.48-1.63.76-2.7.76-2.08 0-3.84-1.4-4.47-3.29H1.87v2.07A8 8 0 0 0 8.98 17z"/>

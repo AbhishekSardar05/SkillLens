@@ -12,23 +12,38 @@ connectDB()
 
 const app = express()
 
-app.use(cors({ origin: 'https://skill-lens-psi.vercel.app/', credentials: true }))
+// CORS
+app.use(cors({
+  origin: 'https://skill-lens-psi.vercel.app',
+  credentials: true
+}))
+
 app.use(express.json())
 
-// Session for Google Auth
+// Session
 app.use(session({
   secret: process.env.SESSION_SECRET || 'skilllens_secret_2026',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    sameSite: 'none'
+  }
 }))
+
 app.use(passport.initialize())
+
+// Create uploads folders
+if (!fs.existsSync('uploads')) {
+  fs.mkdirSync('uploads')
+}
+
+if (!fs.existsSync('uploads/profiles')) {
+  fs.mkdirSync('uploads/profiles', { recursive: true })
+}
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
-
-// Create folders
-// if (!fs.existsSync('uploads')) fs.mkdirSync('uploads')
-// if (!fs.existsSync('uploads/profiles')) fs.mkdirSync('uploads/profiles', { recursive: true })
 
 // Routes
 const authRoutes = require('./routes/authRoutes')
@@ -43,7 +58,12 @@ app.use('/api/skillgap', skillGapRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/ai', aiRoutes)
 
-app.get('/', (req, res) => res.json({ message: 'SkillLens API Running! 🚀' }))
+app.get('/', (req, res) => {
+  res.json({ message: 'SkillLens API Running! 🚀' })
+})
 
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`))
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`)
+})
